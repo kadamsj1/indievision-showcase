@@ -3,88 +3,106 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin, Send, ArrowUpRight } from "lucide-react";
+import { Mail, MapPin, Send, Linkedin, Instagram } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { z } from "zod";
 
-const contactInfo = [
-  {
-    icon: Mail,
-    label: "Email",
-    value: "hello@indievision.com",
-    href: "mailto:hello@indievision.com",
-  },
-  {
-    icon: Phone,
-    label: "Phone",
-    value: "+1 (555) 123-4567",
-    href: "tel:+15551234567",
-  },
-  {
-    icon: MapPin,
-    label: "Location",
-    value: "Los Angeles, California",
-    href: "#",
-  },
-];
+const contactSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, { message: "Name is required" })
+    .max(100, { message: "Name must be less than 100 characters" }),
+  email: z
+    .string()
+    .trim()
+    .min(1, { message: "Email is required" })
+    .email({ message: "Please enter a valid email address" })
+    .max(255, { message: "Email must be less than 255 characters" }),
+  message: z
+    .string()
+    .trim()
+    .min(1, { message: "Message is required" })
+    .max(1000, { message: "Message must be less than 1000 characters" }),
+});
+
+type FormData = z.infer<typeof contactSchema>;
+type FormErrors = Partial<Record<keyof FormData, string>>;
 
 const Contact = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
-    company: "",
-    projectType: "",
-    budget: "",
     message: "",
   });
+  const [errors, setErrors] = useState<FormErrors>({});
+
+  const validateField = (field: keyof FormData, value: string) => {
+    try {
+      contactSchema.shape[field].parse(value);
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        setErrors((prev) => ({ ...prev, [field]: error.errors[0]?.message }));
+      }
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    const result = contactSchema.safeParse(formData);
+    
+    if (!result.success) {
+      const fieldErrors: FormErrors = {};
+      result.error.errors.forEach((err) => {
+        const field = err.path[0] as keyof FormData;
+        fieldErrors[field] = err.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+
     setIsSubmitting(true);
 
     // Simulate form submission
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
     toast({
-      title: "Message sent!",
+      title: "Message sent",
       description: "We'll get back to you within 24 hours.",
     });
 
-    setFormData({
-      name: "",
-      email: "",
-      company: "",
-      projectType: "",
-      budget: "",
-      message: "",
-    });
+    setFormData({ name: "", email: "", message: "" });
+    setErrors({});
     setIsSubmitting(false);
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    validateField(name as keyof FormData, value);
   };
 
   return (
     <Layout>
       {/* Hero */}
-      <section className="pt-32 pb-16 md:pt-40 md:pb-24 bg-background">
+      <section className="pt-32 pb-16 md:pt-40 md:pb-20 bg-background">
         <div className="container mx-auto px-6">
-          <div className="max-w-4xl">
+          <div className="max-w-3xl">
             <p className="text-primary font-medium tracking-[0.2em] uppercase text-sm mb-6 reveal">
-              Get in Touch
+              Contact
             </p>
-            <h1 className="font-serif text-4xl md:text-6xl text-foreground leading-tight mb-8 reveal reveal-delay-1">
-              Let's create
-              <br />
-              <span className="text-muted-foreground">something together</span>
+            <h1 className="font-serif text-4xl md:text-5xl text-foreground leading-tight mb-6 reveal reveal-delay-1">
+              Let's work together
             </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed reveal reveal-delay-2">
-              Whether you have a project in mind or just want to explore
-              possibilities, we'd love to hear from you.
+            <p className="text-muted-foreground text-lg leading-relaxed reveal reveal-delay-2">
+              Have a project in mind? We'd love to hear about it. 
+              Send us a message and we'll respond within 24 hours.
             </p>
           </div>
         </div>
@@ -93,158 +111,121 @@ const Contact = () => {
       {/* Contact Form & Info */}
       <section className="py-16 md:py-24 bg-card">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-16">
             {/* Contact Info */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-2">
               <h2 className="font-serif text-2xl text-foreground mb-8">
-                Contact Information
+                Get in touch
               </h2>
+              
               <div className="space-y-6 mb-12">
-                {contactInfo.map((item) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    className="flex items-start gap-4 group"
-                  >
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
-                      <item.icon size={20} className="text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground text-sm mb-1">
-                        {item.label}
-                      </p>
-                      <p className="text-foreground group-hover:text-primary transition-colors">
-                        {item.value}
-                      </p>
-                    </div>
-                  </a>
-                ))}
+                {/* Email */}
+                <a
+                  href="mailto:hello@indievisionstudios.com"
+                  className="flex items-start gap-4 group"
+                >
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
+                    <Mail size={20} className="text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground text-sm mb-1">Email</p>
+                    <p className="text-foreground group-hover:text-primary transition-colors">
+                      hello@indievisionstudios.com
+                    </p>
+                  </div>
+                </a>
+
+                {/* Location */}
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                    <MapPin size={20} className="text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground text-sm mb-1">Location</p>
+                    <p className="text-foreground">India</p>
+                    <p className="text-muted-foreground text-sm mt-1">
+                      Available for projects worldwide
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* Social Links */}
               <div>
                 <h3 className="font-serif text-lg text-foreground mb-4">
-                  Follow Us
+                  Follow us
                 </h3>
                 <div className="flex gap-3">
-                  {["Instagram", "YouTube", "LinkedIn", "Vimeo"].map(
-                    (social) => (
-                      <a
-                        key={social}
-                        href="#"
-                        className="px-4 py-2 rounded-full border border-border text-sm text-muted-foreground hover:text-foreground hover:border-primary transition-colors"
-                      >
-                        {social}
-                      </a>
-                    )
-                  )}
+                  <a
+                    href="https://linkedin.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-12 h-12 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary hover:bg-primary/10 transition-colors"
+                    aria-label="LinkedIn"
+                  >
+                    <Linkedin size={20} />
+                  </a>
+                  <a
+                    href="https://instagram.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-12 h-12 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary hover:bg-primary/10 transition-colors"
+                    aria-label="Instagram"
+                  >
+                    <Instagram size={20} />
+                  </a>
                 </div>
               </div>
             </div>
 
             {/* Form */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-3">
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label
-                      htmlFor="name"
-                      className="block text-sm text-muted-foreground mb-2"
-                    >
-                      Your Name *
-                    </label>
-                    <Input
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      className="bg-secondary/50 border-border/50 focus:border-primary h-12"
-                      placeholder="John Smith"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm text-muted-foreground mb-2"
-                    >
-                      Email Address *
-                    </label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className="bg-secondary/50 border-border/50 focus:border-primary h-12"
-                      placeholder="john@company.com"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label
-                      htmlFor="company"
-                      className="block text-sm text-muted-foreground mb-2"
-                    >
-                      Company / Organization
-                    </label>
-                    <Input
-                      id="company"
-                      name="company"
-                      value={formData.company}
-                      onChange={handleChange}
-                      className="bg-secondary/50 border-border/50 focus:border-primary h-12"
-                      placeholder="Your company"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="projectType"
-                      className="block text-sm text-muted-foreground mb-2"
-                    >
-                      Project Type
-                    </label>
-                    <select
-                      id="projectType"
-                      name="projectType"
-                      value={formData.projectType}
-                      onChange={handleChange}
-                      className="w-full h-12 px-3 rounded-md bg-secondary/50 border border-border/50 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                    >
-                      <option value="">Select a type</option>
-                      <option value="feature">Feature Film</option>
-                      <option value="commercial">Commercial</option>
-                      <option value="documentary">Documentary</option>
-                      <option value="music-video">Music Video</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="block text-sm text-muted-foreground mb-2"
+                  >
+                    Name *
+                  </label>
+                  <Input
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className={`bg-secondary/50 border-border/50 focus:border-primary h-12 ${
+                      errors.name ? "border-destructive" : ""
+                    }`}
+                    placeholder="Your name"
+                    maxLength={100}
+                  />
+                  {errors.name && (
+                    <p className="text-destructive text-sm mt-1">{errors.name}</p>
+                  )}
                 </div>
 
                 <div>
                   <label
-                    htmlFor="budget"
+                    htmlFor="email"
                     className="block text-sm text-muted-foreground mb-2"
                   >
-                    Budget Range
+                    Email *
                   </label>
-                  <select
-                    id="budget"
-                    name="budget"
-                    value={formData.budget}
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
                     onChange={handleChange}
-                    className="w-full h-12 px-3 rounded-md bg-secondary/50 border border-border/50 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                  >
-                    <option value="">Select a range</option>
-                    <option value="under-25k">Under $25,000</option>
-                    <option value="25k-50k">$25,000 - $50,000</option>
-                    <option value="50k-100k">$50,000 - $100,000</option>
-                    <option value="100k-250k">$100,000 - $250,000</option>
-                    <option value="250k+">$250,000+</option>
-                  </select>
+                    className={`bg-secondary/50 border-border/50 focus:border-primary h-12 ${
+                      errors.email ? "border-destructive" : ""
+                    }`}
+                    placeholder="your@email.com"
+                    maxLength={255}
+                  />
+                  {errors.email && (
+                    <p className="text-destructive text-sm mt-1">{errors.email}</p>
+                  )}
                 </div>
 
                 <div>
@@ -252,17 +233,29 @@ const Contact = () => {
                     htmlFor="message"
                     className="block text-sm text-muted-foreground mb-2"
                   >
-                    Tell us about your project *
+                    Message *
                   </label>
                   <Textarea
                     id="message"
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    required
-                    className="bg-secondary/50 border-border/50 focus:border-primary min-h-[150px]"
-                    placeholder="Share your vision, timeline, and any other details that would help us understand your project better..."
+                    className={`bg-secondary/50 border-border/50 focus:border-primary min-h-[180px] ${
+                      errors.message ? "border-destructive" : ""
+                    }`}
+                    placeholder="Tell us about your project..."
+                    maxLength={1000}
                   />
+                  <div className="flex justify-between mt-1">
+                    {errors.message ? (
+                      <p className="text-destructive text-sm">{errors.message}</p>
+                    ) : (
+                      <span />
+                    )}
+                    <span className="text-muted-foreground text-xs">
+                      {formData.message.length}/1000
+                    </span>
+                  </div>
                 </div>
 
                 <Button
@@ -277,38 +270,11 @@ const Contact = () => {
                   ) : (
                     <>
                       Send Message
-                      <Send size={18} />
+                      <Send size={18} className="ml-2" />
                     </>
                   )}
                 </Button>
               </form>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Map or Additional CTA */}
-      <section className="py-24 md:py-32 bg-background">
-        <div className="container mx-auto px-6">
-          <div className="relative aspect-[21/9] rounded-sm overflow-hidden">
-            <img
-              src="https://images.unsplash.com/photo-1449034446853-66c86144b0ad?q=80&w=2070&auto=format&fit=crop"
-              alt="Los Angeles skyline"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-background/70" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <p className="text-primary font-medium tracking-[0.2em] uppercase text-sm mb-4">
-                  Based in
-                </p>
-                <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
-                  Los Angeles, California
-                </h2>
-                <p className="text-muted-foreground">
-                  Available for projects worldwide
-                </p>
-              </div>
             </div>
           </div>
         </div>

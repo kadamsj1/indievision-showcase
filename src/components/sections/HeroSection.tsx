@@ -21,21 +21,20 @@ export function HeroSection() {
         <div className="max-w-4xl">
           {/* Eyebrow */}
           <p className="text-primary font-medium tracking-[0.2em] uppercase text-sm mb-6 reveal">
-            Film & Media Production
+            Indievision Studios
           </p>
 
           {/* Main Headline */}
           <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl text-foreground leading-[1.1] mb-8 reveal reveal-delay-1">
-            We craft stories
+            Stories Crafted
             <br />
-            <span className="text-muted-foreground">that move audiences</span>
+            <span className="text-muted-foreground">with Vision</span>
           </h1>
 
           {/* Subheadline */}
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed mb-10 reveal reveal-delay-2">
-            Indievision Studios is a boutique production company specializing in
-            cinematic storytelling for brands, filmmakers, and visionaries who
-            demand excellence.
+            Where cinematic artistry meets purposeful storytelling. We transform 
+            ideas into visual experiences that resonate and endure.
           </p>
 
           {/* CTAs */}
@@ -43,12 +42,12 @@ export function HeroSection() {
             <Button variant="hero" size="xl" asChild>
               <Link to="/showreel" className="gap-3">
                 <Play size={18} className="fill-current" />
-                Watch Showreel
+                View Showreel
               </Link>
             </Button>
             <Button variant="hero-outline" size="xl" asChild>
-              <Link to="/portfolio" className="gap-3">
-                View Our Work
+              <Link to="/contact" className="gap-3">
+                Work With Us
                 <ArrowRight size={18} />
               </Link>
             </Button>

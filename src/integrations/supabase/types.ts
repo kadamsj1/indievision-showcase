@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      leads: {
+        Row: {
+          budget: string | null
+          created_at: string
+          email: string
+          id: string
+          message: string | null
+          metadata: Json | null
+          name: string
+          project_type: string | null
+          source: Database["public"]["Enums"]["lead_source"]
+          status: Database["public"]["Enums"]["lead_status"]
+          timeline: string | null
+          updated_at: string
+        }
+        Insert: {
+          budget?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          message?: string | null
+          metadata?: Json | null
+          name: string
+          project_type?: string | null
+          source?: Database["public"]["Enums"]["lead_source"]
+          status?: Database["public"]["Enums"]["lead_status"]
+          timeline?: string | null
+          updated_at?: string
+        }
+        Update: {
+          budget?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string | null
+          metadata?: Json | null
+          name?: string
+          project_type?: string | null
+          source?: Database["public"]["Enums"]["lead_source"]
+          status?: Database["public"]["Enums"]["lead_status"]
+          timeline?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +67,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      lead_source: "contact_form" | "start_project"
+      lead_status: "new" | "contacted" | "qualified" | "closed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +195,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      lead_source: ["contact_form", "start_project"],
+      lead_status: ["new", "contacted", "qualified", "closed"],
+    },
   },
 } as const

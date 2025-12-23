@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
+import { PageTransition } from "../PageTransition";
 
 interface LayoutProps {
   children: ReactNode;
@@ -15,8 +16,10 @@ export function Layout({ children }: LayoutProps) {
       {/* Navigation */}
       <Navbar />
       
-      {/* Main Content */}
-      <main className="flex-1">{children}</main>
+      {/* Main Content with Page Transition */}
+      <PageTransition>
+        <main className="flex-1">{children}</main>
+      </PageTransition>
       
       {/* Footer */}
       <Footer />

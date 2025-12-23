@@ -3,13 +3,11 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Film,
-  Video,
-  Clapperboard,
-  Sparkles,
-  Camera,
+  Pen,
   Music,
-  Lightbulb,
-  Users,
+  Megaphone,
+  Palette,
+  Smartphone,
   ArrowRight,
   Check,
 } from "lucide-react";
@@ -19,96 +17,72 @@ const services = [
     icon: Film,
     title: "Film Production",
     description:
-      "End-to-end film production services from development through delivery. We handle feature films, short films, and independent productions with the same level of dedication and craft.",
+      "Complete film production from pre-production through principal photography. We bring feature films, short films, and documentaries to life with meticulous attention to craft and narrative integrity.",
     features: [
-      "Script development & consulting",
       "Pre-production planning",
+      "Location scouting & management",
       "Principal photography",
-      "On-set production management",
+      "On-set production coordination",
     ],
   },
   {
-    icon: Video,
-    title: "Commercial & Brand Films",
+    icon: Pen,
+    title: "Script & Creative Development",
     description:
-      "Compelling commercial content that tells your brand story and connects with audiences. From product spots to brand documentaries, we create work that drives results.",
+      "Transforming raw ideas into compelling screenplays. Our development process refines concepts, builds narrative structure, and prepares projects for production with clarity and purpose.",
     features: [
-      "Brand strategy & concept",
-      "Storyboarding",
-      "Multi-platform delivery",
-      "Performance optimization",
-    ],
-  },
-  {
-    icon: Clapperboard,
-    title: "Documentary Production",
-    description:
-      "Authentic documentary storytelling that illuminates truth and inspires change. We specialize in character-driven narratives that leave lasting impressions.",
-    features: [
-      "Research & development",
-      "Interview production",
-      "Archival integration",
-      "Festival strategy",
-    ],
-  },
-  {
-    icon: Sparkles,
-    title: "Post-Production",
-    description:
-      "State-of-the-art post-production services to bring your vision to life. Our team of editors, colorists, and sound designers craft polished final products.",
-    features: [
-      "Editorial & assembly",
-      "Color grading",
-      "Visual effects",
-      "Sound design & mixing",
-    ],
-  },
-  {
-    icon: Camera,
-    title: "Cinematography",
-    description:
-      "Expert cinematography services for productions of all sizes. Our directors of photography bring artistic vision and technical excellence to every frame.",
-    features: [
-      "Camera & lighting design",
-      "Aerial & drone footage",
-      "Specialized equipment",
-      "On-location shooting",
-    ],
-  },
-  {
-    icon: Music,
-    title: "Music & Sound",
-    description:
-      "Original music composition and comprehensive sound design services. We create immersive audio experiences that elevate your visual storytelling.",
-    features: [
-      "Original score composition",
-      "Sound design",
-      "Foley & ADR",
-      "Final mix & master",
-    ],
-  },
-  {
-    icon: Lightbulb,
-    title: "Creative Development",
-    description:
-      "Strategic creative services to help bring your ideas to life. From concept development to pitch materials, we help you refine and present your vision.",
-    features: [
-      "Concept development",
-      "Treatment writing",
-      "Pitch deck creation",
+      "Script writing & revisions",
+      "Story development",
+      "Treatment creation",
       "Creative consulting",
     ],
   },
   {
-    icon: Users,
-    title: "Production Services",
+    icon: Music,
+    title: "Music Videos",
     description:
-      "Comprehensive production support services for visiting productions. We provide local expertise, crew, equipment, and logistics management.",
+      "Visually striking music videos that amplify artistic vision. We collaborate closely with artists to create memorable visual experiences that resonate with audiences.",
     features: [
-      "Location scouting",
-      "Crew sourcing",
-      "Equipment rental",
-      "Production coordination",
+      "Concept development",
+      "Performance capture",
+      "Narrative music films",
+      "Live session production",
+    ],
+  },
+  {
+    icon: Megaphone,
+    title: "Commercial Ads",
+    description:
+      "Brand films and commercials that tell authentic stories. We create advertising content with the same cinematic sensibility we bring to narrative work—no shortcuts, no templates.",
+    features: [
+      "Brand storytelling",
+      "Product films",
+      "Campaign production",
+      "Multi-platform delivery",
+    ],
+  },
+  {
+    icon: Palette,
+    title: "Post-Production",
+    description:
+      "Where raw footage becomes cinema. Our post-production team handles editing, color grading, and sound design with the precision and artistry your project deserves.",
+    features: [
+      "Editorial & assembly",
+      "Color grading & correction",
+      "Sound design & mixing",
+      "Visual effects & finishing",
+    ],
+  },
+  {
+    icon: Smartphone,
+    title: "Digital Content",
+    description:
+      "Content crafted for the digital landscape. From social campaigns to web series, we create engaging digital content that maintains cinematic quality at any scale.",
+    features: [
+      "Social media content",
+      "Web series production",
+      "Behind-the-scenes content",
+      "Platform-optimized delivery",
     ],
   },
 ];

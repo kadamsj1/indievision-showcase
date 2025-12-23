@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, MapPin, Send, Linkedin, Instagram } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
 
 const contactSchema = z.object({
@@ -67,17 +68,38 @@ const Contact = () => {
 
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const { data, error } = await supabase.functions.invoke("submit-lead", {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          source: "contact_form",
+        },
+      });
 
-    toast({
-      title: "Message sent",
-      description: "We'll get back to you within 24 hours.",
-    });
+      if (error) throw error;
 
-    setFormData({ name: "", email: "", message: "" });
-    setErrors({});
-    setIsSubmitting(false);
+      if (data?.success) {
+        toast({
+          title: "Message sent",
+          description: data.message || "We'll get back to you within 24 hours.",
+        });
+        setFormData({ name: "", email: "", message: "" });
+        setErrors({});
+      } else {
+        throw new Error(data?.error || "Something went wrong");
+      }
+    } catch (error: any) {
+      console.error("Form submission error:", error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (

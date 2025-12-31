@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Instagram, Youtube, Linkedin, Mail } from "lucide-react";
+import { Logo } from "@/components/Logo";
 
 const socialLinks = [
   { icon: Instagram, href: "#", label: "Instagram" },
@@ -24,13 +25,7 @@ export function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-2">
-            <Link
-              to="/"
-              className="text-xl sm:text-2xl font-serif font-semibold tracking-tight text-foreground"
-            >
-              INDIEVISION
-              <span className="text-primary">.</span>
-            </Link>
+            <Logo size="lg" />
             <p className="mt-4 text-muted-foreground max-w-md leading-relaxed text-sm sm:text-base">
               A boutique film & media production company crafting cinematic
               stories that captivate audiences and elevate brands.

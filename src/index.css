@@ -274,11 +274,11 @@
 
 /* Keyframe Animations */
 @keyframes reveal {
-  from {
+  0% {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(20px);
   }
-  to {
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
@@ -290,25 +290,117 @@
 }
 
 @keyframes slide-up {
-  from {
+  from { 
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(10px);
   }
-  to {
+  to { 
     opacity: 1;
     transform: translateY(0);
   }
 }
 
 @keyframes scale-in {
-  from {
+  from { 
     opacity: 0;
-    transform: scale(0.96);
+    transform: scale(0.95);
   }
-  to {
+  to { 
     opacity: 1;
     transform: scale(1);
   }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  }
+  50% {
+    opacity: 0.8;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  }
+}
+
+/* Loading Screen Animations */
+@keyframes draw-circle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes dot-appear {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes logo-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes text-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes loading-bar {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-draw-circle {
+  animation: draw-circle 0.8s ease-out forwards;
+}
+
+.animate-dot-appear {
+  animation: dot-appear 0.3s ease-out forwards;
+}
+
+.animate-logo-reveal {
+  animation: logo-reveal 0.6s ease-out forwards;
+}
+
+.animate-text-reveal {
+  animation: text-reveal 0.5s ease-out forwards;
+}
+
+.animate-loading-bar {
+  animation: loading-bar 1.5s ease-in-out infinite;
+}
+
+.duration-600 {
+  transition-duration: 600ms;
 }
 
 @keyframes float {

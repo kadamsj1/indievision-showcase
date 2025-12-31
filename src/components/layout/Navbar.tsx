@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/Logo";
 import { cn } from "@/lib/utils";
-
 const navLinks = [
   { name: "Home", path: "/" },
   { name: "About", path: "/about" },
@@ -43,14 +43,7 @@ export function Navbar() {
       <nav className="container mx-auto px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link
-            to="/"
-            className="text-lg sm:text-xl font-serif font-semibold tracking-tight text-foreground hover:text-primary transition-colors"
-          >
-            INDIEVISION
-            <span className="text-primary">.</span>
-          </Link>
-
+          <Logo size="sm" />
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-6 xl:gap-8">
             {navLinks.map((link) => (
